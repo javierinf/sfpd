@@ -1,4 +1,4 @@
-DROP VIEW crimes_aggregrate;
+DROP VIEW IF EXISTS crimes_aggregrate;
 CREATE VIEW crimes_aggregrate AS 
 (
   SELECT

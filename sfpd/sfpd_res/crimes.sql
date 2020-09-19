@@ -1,5 +1,8 @@
+DROP DATABASE IF EXISTS crimesdb;
+CREATE DATABASE crimesdb;
+\c crimesdb;
 
-DROP TABLE crimes CASCADE;
+DROP TABLE  IF EXISTS crimes CASCADE;
 CREATE TABLE crimes (
   analysis_neighborhood VARCHAR(50),
   cad_number INTEGER,
@@ -43,5 +46,5 @@ ALTER COLUMN point TYPE POINT USING point::point;
 UPDATE crimes
 set analysis_neighborhood = NULL WHERE analysis_neighborhood='null';
 
-create extension earthdistance CASCADE;
+CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE;
 

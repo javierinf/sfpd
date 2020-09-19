@@ -14,20 +14,15 @@ Open a terminal tab on the folder where the files are located and login to the d
 ```bash
 psql postgres
 ```
-Create a new DB named crimesdb and connect to it:
-```sql
-CREATE DATABASE crimesdb;
-```
-```sql
-\c crimesdb;
-```
+
 ## Part one - crimes.sql
 To execute the first part, you must type:
 
 ```sql
  \i 'crimes.sql'
 ```
-This will create the table `crimes`. 
+This will create a new DB called `crimesdb`,connect to it and create a new table `crimes`. 
+
 A few considerations:
 * `row_id` was selected as Primary Key as is the unique identifier for every record.
 * `point` was loaded as `VARCHAR` and then transformed into `POINT`
