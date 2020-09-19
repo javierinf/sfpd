@@ -146,9 +146,12 @@ COUNT(incident_id) OVER(PARTITION BY analysis_neighborhood ,
 ```
 
 ### nearby_suspicious_activity
-In order to decide if this flag should be True or False, it calculates all the distances from a record to every other in the TSRANGE. This decision was made in order to use gist indexing and drastically reduce performance time.
+In order to decide if this flag should be True or False, it calculates all the distances from a record to every other in the TSRANGE. TSRANGE was used to allow using GIST indexing in order to reduce execution time on queries.
 
 [Point based earth distance](https://www.postgresql.org/docs/9.3/earthdistance.html) were used to calculate the distance between points. This operator uses points with `(longitude,latitude)` format so I created the string and casted it to point.
+Point based was chosen over cube distance because of its lowest complexity, better accuracy and the fact that this calculations are far from the edge case (180th meridian).
+If a higher level of accuracy is required, PostGIS should be used instead.
+
 
 The result was multiplied by 1.60934 to convert from miles to km.
 
