@@ -113,7 +113,12 @@ Results:
 
 
 ## Part three - view.sql
+To execute the first part, you must type:
 
+```sql
+ \i 'view.sql'
+```
+This will create a view named `crimes_aggregrate`
 ### incident_ts
 This column was calculated using this expression which eliminates the decimal part resulting by dividing the num of minutes by 15:
 ```sql
@@ -162,13 +167,13 @@ The result was multiplied by 1.60934 to convert from miles to km.
                 AND 
                 (tsrange(cc.incident_datetime - INTERVAL '15 min', cc.incident_datetime + INTERVAL '15 min', '[]') @> c.incident_datetime)
                 AND 
-                (c.point != cc.point)
+                (c.incident_id != cc.incident_id)
             ) AS a
-        ) *1.60934 > 1 
+        ) *1.60934 < 1 
       THEN
         TRUE 
       ELSE
         FALSE 
-    END
+    END  AS nearby_suspicious_activity 
 ```
 

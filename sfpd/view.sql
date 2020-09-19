@@ -7,8 +7,6 @@ CREATE VIEW crimes_aggregrate AS
     array_to_string(array_agg(incident_category::text),'||') as incident_categories,
     min(incident_datetime) OVER(PARTITION BY incident_id) as first_incident_datetime,
     min(report_datetime) OVER(PARTITION BY incident_id) as first_report_datetime,
-    min(report_datetime)  as first_report_datetime2,
-    min(incident_datetime) as first_incident_datetime2,
     COUNT(incident_id) OVER(PARTITION BY analysis_neighborhood , 
     (
       date_trunc('hour', incident_datetime) + date_part('minute', incident_datetime)::INT / 15 * INTERVAL '15 min'

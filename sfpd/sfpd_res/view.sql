@@ -7,8 +7,6 @@ CREATE VIEW crimes_aggregrate AS
     array_to_string(array_agg(incident_category::text),'||') as incident_categories,
     min(incident_datetime) OVER(PARTITION BY incident_id) as first_incident_datetime,
     min(report_datetime) OVER(PARTITION BY incident_id) as first_report_datetime,
-    min(report_datetime)  as first_report_datetime2,
-    min(incident_datetime) as first_incident_datetime2,
     COUNT(incident_id) OVER(PARTITION BY analysis_neighborhood , 
     (
       date_trunc('hour', incident_datetime) + date_part('minute', incident_datetime)::INT / 15 * INTERVAL '15 min'
@@ -27,10 +25,10 @@ CREATE VIEW crimes_aggregrate AS
                 (cc.point IS NOT NULL)
                 AND 
                 (tsrange(cc.incident_datetime - INTERVAL '15 min', cc.incident_datetime + INTERVAL '15 min', '[]') @> c.incident_datetime)
-  --              AND 
-  --              (c.point != cc.point)
+                AND 
+                (c.incident_id != cc.incident_id)
             ) AS a
-        ) *1.60934 > 1 
+        ) *1.60934 < 1 
       THEN
         TRUE 
       ELSE
@@ -42,16 +40,5 @@ CREATE VIEW crimes_aggregrate AS
     (c.point IS NOT NULL)
   GROUP BY
     incident_id, incident_datetime, analysis_neighborhood,latitude,longitude,report_datetime
-  ORDER BY
+ ORDER BY
     incident_datetime, analysis_neighborhood );
-
-
-
-SELECT
-  incident_ts,
-  first_incident_datetime,
-  first_report_datetime,
-  first_report_datetime2,
-  first_incident_datetime2
-FROM
-  crimes_aggregrate;
