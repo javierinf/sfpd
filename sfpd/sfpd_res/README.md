@@ -61,13 +61,17 @@ Results : 48 Burglaries
 ### Second query:
 `incident_number` were counted grouped by `analysis_neighborhood` and sorted `ASC` ignoring `NULL` values. The query was limited to five in order to retrieve the top 5.
 ```sql
-SELECT 
-DISTINCT analysis_neighborhood,
- count (DISTINCT incident_number) AS reported_incidents 
- FROM crimes 
- WHERE (analysis_neighborhood IS NOT null)  
- GROUP BY analysis_neighborhood 
- ORDER BY count(DISTINCT incident_number) ASC LIMIT 5;
+SELECT DISTINCT 
+  analysis_neighborhood,
+  count (DISTINCT incident_number) AS reported_incidents 
+ FROM 
+  crimes 
+ WHERE 
+  (analysis_neighborhood IS NOT null)  
+ GROUP BY 
+  analysis_neighborhood 
+ ORDER BY 
+  count(DISTINCT incident_number) ASC LIMIT 5;
 ```
 Results:
 ```sql
@@ -84,13 +88,19 @@ Results:
 A CTE was used to group by `police_distric` and select and count the number of required `resolutions` 
 ```sql
 WITH CTE_gp AS 
-(SELECT 
-DISTINCT police_district,
- count (DISTINCT incident_number) AS active_incidents 
- FROM crimes 
- WHERE (resolution= 'Open or Active')  
- GROUP BY police_district 
- ORDER BY count(DISTINCT incident_number) ASC)
+(
+  SELECT DISTINCT
+    police_district,
+    COUNT (DISTINCT incident_number) AS active_incidents 
+  FROM
+    crimes 
+  WHERE
+    (resolution = 'Open or Active')
+  GROUP BY
+    police_district 
+  ORDER BY
+    COUNT(DISTINCT incident_number) ASC
+)
 ```
 Then this CTE was used on two subqueries (one for MAX and one for MIN) :
 ```sql
