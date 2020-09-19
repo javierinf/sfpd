@@ -107,10 +107,6 @@ Results:
 (2 rows)
 ```
 
-## Part three - view.sql
-# SF Crime Report Analysis
-
-
 
 ## Part three - view.sql
 To execute the first part, you must type:
