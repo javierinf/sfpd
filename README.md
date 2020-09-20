@@ -53,7 +53,9 @@ AND
 AND 
   (incident_date BETWEEN '2018-05-01' AND '2018-05-31')
 ```
+```
 Results : 48 Burglaries
+```
 ### Second query:
 `incident_number` were counted grouped by `analysis_neighborhood` and sorted `ASC` ignoring `NULL` values. The query was limited to five in order to retrieve the top 5.
 ```sql
