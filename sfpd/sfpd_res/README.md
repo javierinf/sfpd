@@ -14,6 +14,7 @@ Open a terminal tab on the folder where the files are located and login to the d
 ```bash
 psql postgres
 ```
+Postgresql services must be running
 
 ## Part one - crimes.sql
 To execute the first part, you must type:
