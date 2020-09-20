@@ -39,18 +39,18 @@ To execute the second part, you must type:
 ```
 Please note that this requires `crimes.sql` to be runned before to create a load data into the table.
 ### First query:
-`incident_id` was used to count the number of occurrences according to the documentation dictates.
+`incident_id` was used to count the number of occurrences according to the documentation.
 ```sql
 SELECT 
-count(DISTINCT incident_id) AS Burglaries_in_South_of_Market 
+  count(DISTINCT incident_id) AS Burglaries_in_South_of_Market 
 FROM 
-crimes
+  crimes
 WHERE 
-(analysis_neighborhood = 'South of Market') 
+  (analysis_neighborhood = 'South of Market') 
 AND 
-(incident_category = 'Burglary') 
+  (incident_category = 'Burglary') 
 AND 
-(incident_date BETWEEN '2018-05-01' AND '2018-05-31')
+  (incident_date BETWEEN '2018-05-01' AND '2018-05-31')
 ```
 Results : 48 Burglaries
 ### Second query:
@@ -121,13 +121,13 @@ To execute the first part, you must type:
 ```
 This will create a view named `crimes_aggregrate`
 ### incident_ts
-This column was calculated using this expression which eliminates the decimal part resulting by dividing the num of minutes by 15:
+This column was calculated using this straightforward expression 
 ```sql
 date_trunc('hour', incident_datetime) + 
 date_part('minute', incident_datetime)::INT / 15 * INTERVAL '15 min'
 ```
 ### incident_categories
-Was created by concatenating all the unique values on a string, grouped by `incident_id`
+Was created by concatenating all the unique values on a string with double pipes
 ```sql
     array_to_string(array_agg(incident_category::text),'||')
 ```
@@ -149,8 +149,8 @@ COUNT(incident_id) OVER(PARTITION BY analysis_neighborhood ,
 ### nearby_suspicious_activity
 In order to decide if this flag should be True or False, it calculates all the distances from a record to every other in the TSRANGE. TSRANGE was used to allow using GIST indexing in order to reduce execution time on queries.
 
-[Point based earth distance](https://www.postgresql.org/docs/9.3/earthdistance.html) were used to calculate the distance between points. This operator uses points with `(longitude,latitude)` format so I created the string and casted it to point.
-Point based was chosen over cube distance because of its lowest complexity, better accuracy and the fact that this calculations are far from the edge case (180th meridian).
+[Point based earth distance](https://www.postgresql.org/docs/9.3/earthdistance.html) was used to calculate the distance between points. This operator uses points with `(longitude,latitude)` format so I created the string and casted it to point.
+Point based was chosen over cube distance because of its lower complexity, better accuracy and the fact that this calculations are far from the edge case (180th meridian).
 If a higher level of accuracy is required, PostGIS should be used instead.
 
 
